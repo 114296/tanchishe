@@ -2,7 +2,7 @@
 #include<time.h>
 #include<windows.h>
 #include<stdlib.h>
-
+#include <conio.h>
 
 #define U 1
 #define D 2
@@ -37,6 +37,12 @@ void welcometogame();
 void endgame();
 void gamestart();
 
+//颜色设置
+void color(int c)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), c); //颜色设置
+	//注：SetConsoleTextAttribute是一个API（应用程序编程接口）
+}
 
 void Pos(int x, int y)//设置光标位置
 {
@@ -72,6 +78,7 @@ int logCount = 0;
 
 void creatMap()//创建地图
 {
+    color(9); //颜色设置为土黄色
     int i;
     for (i = 0; i < 58; i += 2)//打印上下边框
     {
@@ -91,6 +98,7 @@ void creatMap()//创建地图
 
 void initsnake()//初始化蛇身
 {
+     color(6);
     snake* tail;
     int i;
     tail = (snake*)malloc(sizeof(snake));//从蛇尾开始，头插法，以x,y设定开始的位置//
@@ -131,6 +139,7 @@ int biteself()//判断是否咬到了自己
 
 void createfood()
 {
+    color(10);
     snake* food_1;
     srand((unsigned)time(NULL));
     food_1 = (snake*)malloc(sizeof(snake));
@@ -156,7 +165,7 @@ void createfood()
 
     Pos(food_1->x, food_1->y);
     food = food_1;
-    printf("■");
+    printf("●");
 }
 
 
@@ -171,6 +180,7 @@ void cantcrosswall()//不能穿墙
 
 void snakemove()//蛇前进,上U,下D,左L,右R
 {
+    color(6);
     snake* nexthead;
     cantcrosswall();
 
@@ -337,7 +347,7 @@ void pause()//暂停
 
 void gamecircle(char* name)//控制游戏
 {
-
+    color(7);
     Pos(64, 14);
     printf("%s正在游戏中", name);
     Pos(64, 15);
@@ -415,34 +425,26 @@ void gamecircle(char* name)//控制游戏
 void welcometogame()//开始界面
 
 {
-
-
-
+    color(7);
     Pos(40, 12);
     printf("欢迎来到贪食蛇游戏！");
     Pos(40, 25);
     system("pause");
     system("cls");
-
-    Pos(40, 15);
-    printf("按F5显示游戏用户日志");
-    Pos(40, 25);
-    system("pause");
-    system("cls");
-
     Pos(25, 12);
     printf("用↑.↓.←.→分别控制蛇的移动， F1 为加速，2 为减速\n");
     Pos(25, 13);
     printf("加速将能得到更高的分数。\n");
     system("pause");
     system("cls");
-
 }
 
 char reg_name[30] = "", reg_pwd[10] = "";
 char on_name[30], on_pwd[10];
 void endgame() {
-    system("cls");
+
+    color(7);
+
 
     // 更新日志记录
     int currentDuration = (int)difftime(time(NULL), logs[logCount].startTime);
@@ -450,7 +452,8 @@ void endgame() {
     logs[logCount].score = score;
     strcpy(logs[logCount].username, reg_name);
     logs[logCount].id = logCount + 1;
-    logCount++;
+
+    system("cls");
 
     Pos(24, 12);
     if (endgamestatus == 1) {
@@ -467,6 +470,9 @@ void endgame() {
     printf("您的得分是%d\n", score);
     Pos(24, 14);
     printf("游戏持续时间：%d秒\n", currentDuration);
+
+    logCount++;
+
 
     exit(0);
 }
